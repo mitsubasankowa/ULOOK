@@ -1,0 +1,185 @@
+/* --- 全体・リセット --- */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    width: 100vw; 
+    height: 100vh; 
+    overflow: hidden; 
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; 
+    color: #000; 
+    background: #eaeaee; 
+}
+
+/* 背景画像 */
+.bg-layer {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: url('../ULOOK/texture.png') center/cover no-repeat;
+    opacity: 0.9; 
+    z-index: -1;
+}
+
+.stage { 
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
+    padding: 3vw; 
+}
+
+/* --- 戻るボタン --- */
+.nav-header { 
+    position: absolute; 
+    top: 4vh; 
+    left: 3vw; 
+}
+.back-link { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: #1a1a1a; 
+    color: #fff; 
+    padding: 1.2vh 2vw;
+    font-size: 2vw; 
+    font-weight: bold; 
+    border-radius: 8px;
+    cursor: pointer; 
+    text-decoration: none;
+}
+.back-link::before { 
+    content: '◀'; 
+    margin-right: 1vw; 
+    font-size: 2.2vw; 
+}
+
+/* --- 左側コンテンツ：製品画像とタイトル --- */
+.product-visual {
+    position: absolute;
+    left: 8vw;
+    top: 45vh;
+    transform: translateY(-50%);
+    width: 33vw; 
+}
+.lens-display-img { 
+    width: 100%; 
+    filter: drop-shadow(0 2vh 4vh rgba(0,0,0,0.3)); 
+}
+
+.product-titles {
+    position: absolute;
+    top: 65vh;
+    left: 8vw;
+    width: 33vw;
+    text-align: center;
+}
+.name-jp { 
+    font-size: 4.5vw; 
+    font-weight: 900; 
+    letter-spacing: 2px; 
+    line-height: 1.1;
+    margin-bottom: 1vh;
+}
+.name-en { 
+    font-size: 2.2vw; 
+    font-weight: bold; 
+    letter-spacing: 8px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+/* --- 右側コンテンツ：シミュレーター --- */
+.view-comparison { 
+    position: absolute;
+    right: 5vw;
+    top: 8vh;
+    width: 48vw; /* ★下の適合表エリアと幅を合わせる */
+    cursor: pointer; 
+}
+.guide-text { 
+    font-size: 1.6vw; 
+    font-weight: bold; 
+    text-align: right; 
+    margin-bottom: 1vh; 
+}
+.image-frame { 
+    position: relative; 
+    width: 100%; 
+    height: 48vh; 
+    border-radius: 15px; 
+    overflow: hidden; 
+    box-shadow: 0 3vh 6vh rgba(0,0,0,0.35);
+    background: #000;
+}
+.view-img { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: opacity 0.3s ease; 
+}
+.view-img.on { opacity: 0; }
+.view-img.on.active { opacity: 1; }
+
+/* 切り替えボタン */
+.toggle-badge {
+    position: absolute; 
+    bottom: 3vh; 
+    right: 2vw;
+    padding: 1.5vh 3.5vw; 
+    font-size: 1.8vw; 
+    font-weight: bold;
+    border-radius: 50px; 
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 1vh 3vh rgba(0,0,0,0.4);
+}
+.toggle-badge.is-on { background: #2ecc71; color: #fff; }
+.toggle-badge.is-off { background: #7f8c8d; color: #fff; }
+
+/* --- 下部コンテンツ：適合表（画像の左端に揃える） --- */
+.compatibility-box {
+    position: absolute;
+    bottom: 6vh;
+    right: 5vw; /* シミュレーターと同じ位置 */
+    width: 48vw; /* シミュレーターと同じ幅 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* ★これで文字と表の左端がシミュレーター画像と揃う */
+}
+.table-caption { 
+    font-size: 2.5vw; 
+    font-weight: bold; 
+    margin-bottom: 1.5vh; 
+    text-align: left; /* 左揃え */
+}
+.spec-table {
+    width: 100%; /* 親要素の48vwいっぱいに広げる */
+    border-collapse: collapse; 
+    background: #fff;
+    font-size: 1.3vw; 
+    text-align: center; 
+    table-layout: fixed;
+    border: 3px solid #000;
+}
+.spec-table th { 
+    background: #000; 
+    color: #fff; 
+    padding: 1.2vh; 
+    font-size: 1.6vw; 
+    border: 1px solid #444;
+}
+.spec-table td { 
+    border: 1px solid #000; 
+    padding: 1.5vh 0.5vw; 
+    font-weight: bold; 
+    line-height: 1.4; 
+    color: #000;
+}
