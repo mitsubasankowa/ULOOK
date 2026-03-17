@@ -1,22 +1,28 @@
-/* --- 1. 全体リセット & 下線削除 --- */
+/* --- 1. 全体リセット & 下線・枠線の完全削除 --- */
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
-    text-decoration: none !important; /* すべての下線を削除 */
+    /* すべての下線を一括で強制削除 */
+    text-decoration: none !important; 
+    /* タップ時のハイライト（青い枠）を消す */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html { 
     width: 100vw; 
     height: 100vh; 
     overflow: hidden; 
-    font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+    /* 背景色はHTMLのbody側で制御するため透明に設定 */
     background-color: transparent; 
 }
 
+/* リンク全般の挙動リセット */
 a {
     color: inherit;
-    -webkit-tap-highlight-color: transparent; /* タップ時の青枠を消す */
+    outline: none;
+    text-decoration: none !important;
 }
 
 /* --- 2. メインレイアウト --- */
@@ -29,19 +35,32 @@ a {
     flex-direction: column;
 }
 
-/* --- 3. 上部エリア（ロゴ・ボタン） --- */
+/* --- 3. 上部エリア（ロゴ・EVO2ボタン） --- */
 .top-nav {
     height: 45vh; /* 画面の上部を広く取り、カルーセルを下に押し下げる */
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; 
-    padding: 0 8vw 6vh 8vw; 
+    align-items: flex-end; /* ロゴとボタンをエリアの底辺に揃える */
+    padding: 0 8vw 6vh 8vw; /* 下余白6vhでレンズとの距離を調整 */
+    width: 100%;
 }
 
-.logo-img { width: 30vw; max-width: 550px; height: auto; }
-.main-copy { font-size: 2.8vw; font-weight: 900; color: #1a1a1a; line-height: 1.4; }
+.logo-img { 
+    width: 30vw; 
+    max-width: 550px; 
+    height: auto; 
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); 
+}
 
-/* --- 4. EVO2ボタン（黄色ボックス・黒文字） --- */
+.main-copy { 
+    font-size: 2.8vw; 
+    font-weight: 900; 
+    margin-top: 2vh; 
+    color: #1a1a1a; 
+    line-height: 1.4; 
+}
+
+/* --- 4. EVO2ボタン（黄色ボックス） --- */
 .yellow-box { 
     background: #ffd700; 
     border-radius: 50px; 
@@ -50,18 +69,38 @@ a {
     align-items: center; 
     gap: 2vw; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+    transition: transform 0.2s ease;
 }
 
-.photo-guide-text, .photo-guide-text span { 
-    color: #000 !important; /* 文字色は黒 */
+.yellow-box:active { 
+    transform: scale(0.95); 
+}
+
+/* EVO2内の文字色を「黒」に固定 */
+.photo-guide-text, 
+.photo-guide-text span { 
+    color: #000 !important; 
     font-weight: bold;
+    text-decoration: none !important;
 }
 
-.photo-guide-text { font-size: 1.8vw; line-height: 1.2; }
-.photo-guide-text span { font-size: 3.5vw; display: block; font-weight: 900; }
-.photo-lens-img { width: 12vw; height: auto; }
+.photo-guide-text { 
+    font-size: 1.8vw; 
+    line-height: 1.2; 
+}
 
-/* --- 5. カルーセルエリア（手動スワイプ対応） --- */
+.photo-guide-text span { 
+    font-size: 3.5vw; 
+    display: block; 
+    font-weight: 900;
+}
+
+.photo-lens-img { 
+    width: 12vw; 
+    height: auto; 
+}
+
+/* --- 5. カルーセルエリア（手動操作・無限ループ対応） --- */
 .carousel-section { 
     flex: 1; 
     display: flex; 
@@ -73,14 +112,20 @@ a {
 .scroll-container { 
     width: 100%; 
     overflow: hidden; 
-    touch-action: pan-y; /* 左右スワイプを有効化 */
+    cursor: grab;
+    /* 左右スワイプをJSに完全に任せ、ブラウザの干渉を防ぐ */
+    touch-action: pan-y; 
+    user-select: none;
 }
 
 .scroll-track { 
     display: flex; 
     width: max-content; 
+    /* 自動スクロール設定 */
     animation: scroll 80s linear infinite; 
     will-change: transform;
+    /* 重要：JSでの位置計算時に「跳ね返り」を起こさないようtransitionを無効化 */
+    transition: none !important; 
 }
 
 @keyframes scroll { 
@@ -88,21 +133,45 @@ a {
     100% { transform: translateX(-50%); } 
 }
 
+/* 各レンズの設定 */
 .lens-card { 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    margin: 0 6vw; 
+    margin: 0 6vw; /* レンズ同士の間隔 */
 }
 
 .lens-card img {
-    width: 38vw; /* レンズを巨大化 */
+    width: 38vw; /* カルーセル画像を巨大化 */
     filter: drop-shadow(0 25px 50px rgba(0,0,0,0.3));
+    /* ホバー/アクティブ時の拡大演出用のみにtransitionを適用 */
     transition: transform 0.3s ease;
-    pointer-events: none; /* 画像がスワイプの邪魔をしないようにする */
+    /* 画像そのものがドラッグイベントを邪魔しないように設定 */
+    pointer-events: none; 
 }
 
-.lens-card:active img { transform: scale(1.1); }
+/* タップした時にレンズが少し大きくなる演出 */
+.lens-card:active img { 
+    transform: scale(1.1); 
+}
 
-.label .jp { display: block; font-size: 2vw; font-weight: 900; color: #000; }
-.label .en { display: block; font-size: 1.1vw; color: #555; letter-spacing: 3px; }
+/* レンズ名のラベル */
+.label {
+    text-align: center;
+    margin-bottom: 3vh;
+}
+
+.label .jp { 
+    display: block; 
+    font-size: 2vw; 
+    font-weight: 900; 
+    color: #000; 
+}
+
+.label .en { 
+    display: block; 
+    font-size: 1.1vw; 
+    color: #555; 
+    letter-spacing: 3px; 
+    margin-top: 0.5vh;
+}

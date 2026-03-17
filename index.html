@@ -6,39 +6,12 @@
     <title>ULOOK 比較選択</title>
     <link rel="stylesheet" href="ULOOKhikaku.css">
     <style>
-        /* 1層目：背景色 */
-        body {
-            background-color: #eaeaee !important; 
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* 2層目：背景画像（imgタグ） */
+        body { background-color: #eaeaee !important; margin: 0; overflow: hidden; }
         .bg-img-full {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            object-fit: cover !important;
-            z-index: -1 !important;
-            pointer-events: none !important;
-            opacity: 0.9 !important;
+            position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh;
+            object-fit: cover; z-index: -1; pointer-events: none; opacity: 0.9;
         }
-
-        /* 3層目：コンテンツ */
-        .stage {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: transparent !important;
-        }
+        .stage { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; flex-direction: column; background: transparent !important; }
     </style>
 </head>
 <body>
@@ -51,11 +24,10 @@
                 <img src="ULOOK/ULOOK_logo.png" alt="ULOOK" class="logo-img">
                 <h1 class="main-copy">気になるカラーをタップで<br>見え方チェック！</h1>
             </header>
-
             <a href="EVO2.html" class="photochromic-nav">
                 <div class="yellow-box">
                     <p class="photo-guide-text">新型調光<br><span>EVO2</span> はこちら</p>
-                    <img src="ULOOK/tyoukou.png" class="photo-lens-img" alt="新型調光">
+                    <img src="ULOOK/tyoukou.png" class="photo-lens-img">
                 </div>
             </a>
         </div>
@@ -63,41 +35,21 @@
         <div class="carousel-section">
             <div class="scroll-container" id="scrollContainer">
                 <div class="scroll-track" id="scrollTrack">
-                    <a href="blue.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーブルー</span><span class="en">MIRROR BLUE</span></div>
-                        <img src="ULOOK/blue.png" alt="BLUE">
-                    </a>
-                    <a href="gold.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーゴールド</span><span class="en">MIRROR GOLD</span></div>
-                        <img src="ULOOK/gold.png" alt="GOLD">
-                    </a>
-                    <a href="red.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーレッド</span><span class="en">MIRROR RED</span></div>
-                        <img src="ULOOK/red.png" alt="RED">
-                    </a>
-                    <a href="silver.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーシルバー</span><span class="en">MIRROR SILVER</span></div>
-                        <img src="ULOOK/silver.png" alt="SILVER">
-                    </a>
-                    <a href="purple.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーパープル</span><span class="en">MIRROR PURPLE</span></div>
-                        <img src="ULOOK/purple.png" alt="PURPLE">
-                    </a>
-                    <a href="green.html" class="lens-card">
-                        <div class="label"><span class="jp">ミラーグリーン</span><span class="en">MIRROR GREEN</span></div>
-                        <img src="ULOOK/green.png" alt="GREEN">
-                    </a>
                     <a href="blue.html" class="lens-card"><div class="label"><span class="jp">ミラーブルー</span><span class="en">MIRROR BLUE</span></div><img src="ULOOK/blue.png"></a>
                     <a href="gold.html" class="lens-card"><div class="label"><span class="jp">ミラーゴールド</span><span class="en">MIRROR GOLD</span></div><img src="ULOOK/gold.png"></a>
                     <a href="red.html" class="lens-card"><div class="label"><span class="jp">ミラーレッド</span><span class="en">MIRROR RED</span></div><img src="ULOOK/red.png"></a>
+                    <a href="silver.html" class="lens-card"><div class="label"><span class="jp">ミラーシルバー</span><span class="en">MIRROR SILVER</span></div><img src="ULOOK/silver.png"></a>
+                    <a href="purple.html" class="lens-card"><div class="label"><span class="jp">ミラーパープル</span><span class="en">MIRROR PURPLE</span></div><img src="ULOOK/purple.png"></a>
+                    <a href="green.html" class="lens-card"><div class="label"><span class="jp">ミラーグリーン</span><span class="en">MIRROR GREEN</span></div><img src="ULOOK/green.png"></a>
+                    <a href="blue.html" class="lens-card"><div class="label"><span class="jp">ミラーブルー</span><span class="en">MIRROR BLUE</span></div><img src="ULOOK/blue.png"></a>
+                    <a href="gold.html" class="lens-card"><div class="label"><span class="jp">ミラーゴールド</span><span class="en">MIRROR GOLD</span></div><img src="ULOOK/gold.png"></a>
+                    <a href="red.html" class="lens-card"><div class="label"><span class="jp">ミラーレッド</span><span class="en">MIRROR RED</span></div><img src="ULOOK/red.png"></a>
+                    <a href="silver.html" class="lens-card"><div class="label"><span class="jp">ミラーシルバー</span><span class="en">MIRROR SILVER</span></div><img src="ULOOK/silver.png"></a>
+                    <a href="purple.html" class="lens-card"><div class="label"><span class="jp">ミラーパープル</span><span class="en">MIRROR PURPLE</span></div><img src="ULOOK/purple.png"></a>
+                    <a href="green.html" class="lens-card"><div class="label"><span class="jp">ミラーグリーン</span><span class="en">MIRROR GREEN</span></div><img src="ULOOK/green.png"></a>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="ULOOKhikakuJS.js"></script>
-</body>
-</html>
     </div>
 
     <script src="ULOOKhikakuJS.js"></script>
