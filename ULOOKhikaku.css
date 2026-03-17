@@ -3,9 +3,7 @@
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
-    /* すべての下線を一括で強制削除 */
     text-decoration: none !important; 
-    /* タップ時のハイライト（青い枠）を消す */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -14,11 +12,9 @@ body, html {
     height: 100vh; 
     overflow: hidden; 
     font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-    /* 背景色はHTMLのbody側で制御するため透明に設定 */
     background-color: transparent; 
 }
 
-/* リンク全般の挙動リセット */
 a {
     color: inherit;
     outline: none;
@@ -37,11 +33,11 @@ a {
 
 /* --- 3. 上部エリア（ロゴ・EVO2ボタン） --- */
 .top-nav {
-    height: 45vh; /* 画面の上部を広く取り、カルーセルを下に押し下げる */
+    height: 45vh; 
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* ロゴとボタンをエリアの底辺に揃える */
-    padding: 0 8vw 6vh 8vw; /* 下余白6vhでレンズとの距離を調整 */
+    align-items: flex-end; 
+    padding: 0 8vw 6vh 8vw; 
     width: 100%;
 }
 
@@ -76,7 +72,6 @@ a {
     transform: scale(0.95); 
 }
 
-/* EVO2内の文字色を「黒」に固定 */
 .photo-guide-text, 
 .photo-guide-text span { 
     color: #000 !important; 
@@ -100,7 +95,7 @@ a {
     height: auto; 
 }
 
-/* --- 5. カルーセルエリア（手動操作・無限ループ対応） --- */
+/* --- 5. カルーセルエリア（挙動修正済み） --- */
 .carousel-section { 
     flex: 1; 
     display: flex; 
@@ -113,18 +108,17 @@ a {
     width: 100%; 
     overflow: hidden; 
     cursor: grab;
-    /* 左右スワイプをJSに完全に任せ、ブラウザの干渉を防ぐ */
-    touch-action: pan-y; 
+    /* 修正：左右スワイプをJSに完全に委ね、ブラウザの「戻る」挙動と干渉させない */
+    touch-action: none; 
     user-select: none;
 }
 
 .scroll-track { 
     display: flex; 
     width: max-content; 
-    /* 自動スクロール設定 */
     animation: scroll 80s linear infinite; 
     will-change: transform;
-    /* 重要：JSでの位置計算時に「跳ね返り」を起こさないようtransitionを無効化 */
+    /* 修正：重要！JS操作中にCSSのtransitionが割り込むと跳ね返りが発生するため、常時無効化 */
     transition: none !important; 
 }
 
@@ -138,24 +132,22 @@ a {
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    margin: 0 6vw; /* レンズ同士の間隔 */
+    margin: 0 6vw; 
 }
 
 .lens-card img {
-    width: 38vw; /* カルーセル画像を巨大化 */
+    width: 38vw; 
     filter: drop-shadow(0 25px 50px rgba(0,0,0,0.3));
-    /* ホバー/アクティブ時の拡大演出用のみにtransitionを適用 */
+    /* 画像の拡大アニメーションは維持 */
     transition: transform 0.3s ease;
-    /* 画像そのものがドラッグイベントを邪魔しないように設定 */
+    /* 修正：画像へのタッチがスワイプを邪魔しないよう設定 */
     pointer-events: none; 
 }
 
-/* タップした時にレンズが少し大きくなる演出 */
 .lens-card:active img { 
     transform: scale(1.1); 
 }
 
-/* レンズ名のラベル */
 .label {
     text-align: center;
     margin-bottom: 3vh;

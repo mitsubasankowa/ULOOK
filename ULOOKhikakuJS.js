@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let startX = 0;
     let currentTranslate = 0;
-    const scrollSpeed = 80; // アニメーションの1周の時間（秒）
+    const scrollSpeed = 80; // CSSのanimation時間と合わせる
 
     // 自動スクロールを完全に停止
     const stopAutoScroll = () => {
@@ -18,14 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const startAutoScroll = () => {
         const halfWidth = track.offsetWidth / 2;
         // 現在のズレ（0〜半分まで）から進捗率（0〜100%）を計算
+        // translateXがマイナスなので絶対値をとる
         let progress = (Math.abs(currentTranslate) % halfWidth) / halfWidth * 100;
         
         track.style.animation = `scroll ${scrollSpeed}s linear infinite`;
-        // 指を離した場所から再開するようにディレイをマイナス値で調整
+        // 指を離した場所から再開するようにディレイを調整
         track.style.animationDelay = `-${(progress / 100) * scrollSpeed}s`;
     };
 
-    // 操作開始の共通処理
+    // 操作開始
     const handleStart = (clientX) => {
         isDragging = true;
         
@@ -34,27 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const matrix = new WebKitCSSMatrix(style.transform);
         currentTranslate = matrix.m41;
         
+        // 指の開始位置を補正
         startX = clientX - currentTranslate;
         
         stopAutoScroll();
-        // transformを固定して指に追従させる準備
         track.style.transform = `translateX(${currentTranslate}px)`;
     };
 
-    // 操作中（移動）の共通処理
+    // 操作中（スワイプ）
     const handleMove = (clientX) => {
         if (!isDragging) return;
         
         currentTranslate = clientX - startX;
         const halfWidth = track.offsetWidth / 2;
 
-        // 【無限ループ・ワープ処理】
-        // 左に動かしすぎて余白が出そうになったら右へワープ
+        /* 【無限ループ・ワープ処理】
+           左端や右端に到達して余白が出そうになったら、
+           見た目を変えずに1セット分(halfWidth)位置を飛ばす
+        */
         if (currentTranslate <= -halfWidth) {
             startX += halfWidth;
             currentTranslate += halfWidth;
         }
-        // 右に動かしすぎて左端が見えそうになったら左へワープ
         if (currentTranslate > 0) {
             startX -= halfWidth;
             currentTranslate -= halfWidth;
@@ -63,16 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(${currentTranslate}px)`;
     };
 
-    // 操作終了の共通処理
+    // 操作終了
     const handleEnd = () => {
         if (!isDragging) return;
         isDragging = false;
         startAutoScroll();
     };
 
-    // --- イベントリスナーの登録 ---
+    // --- イベントリスナー ---
 
-    // タッチ操作（タブレット・スマホ）
+    // タッチ操作
     container.addEventListener('touchstart', (e) => {
         handleStart(e.touches[0].clientX);
     }, { passive: true });
@@ -83,20 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     container.addEventListener('touchend', handleEnd);
 
-    // マウス操作（PC確認用）
+    // マウス操作
     container.addEventListener('mousedown', (e) => {
         handleStart(e.clientX);
-        container.style.cursor = 'grabbing';
     });
 
     window.addEventListener('mousemove', (e) => {
         handleMove(e.clientX);
     });
 
-    window.addEventListener('mouseup', () => {
-        if (isDragging) {
-            container.style.cursor = 'grab';
-            handleEnd();
-        }
-    });
+    window.addEventListener('mouseup', handleEnd);
 });
