@@ -6,7 +6,7 @@
     <title>ULOOK 比較選択</title>
     <link rel="stylesheet" href="ULOOKhikaku.css">
     <style>
-        /* 1層目：一番奥の背景色 */
+        /* 1層目：背景色 */
         body {
             background-color: #eaeaee !important; 
             margin: 0;
@@ -16,7 +16,7 @@
             height: 100vh;
         }
 
-        /* 2層目：背景画像（imgタグで確実に表示） */
+        /* 2層目：背景画像（imgタグ） */
         .bg-img-full {
             position: fixed !important;
             top: 0 !important;
@@ -24,12 +24,12 @@
             width: 100vw !important;
             height: 100vh !important;
             object-fit: cover !important;
-            z-index: -1 !important; /* 背景色の上、コンテンツの下 */
+            z-index: -1 !important;
             pointer-events: none !important;
-            opacity: 0.9 !important; /* 背景色を少し透かす */
+            opacity: 0.9 !important;
         }
 
-        /* 3層目：メインコンテンツエリア */
+        /* 3層目：コンテンツ */
         .stage {
             position: relative;
             z-index: 1;
@@ -43,7 +43,7 @@
 </head>
 <body>
 
-    <img src="texture.png" class="bg-img-full" alt="背景">
+    <img src="ULOOK/texture.png" class="bg-img-full" alt="背景">
 
     <div class="stage">
         <div class="top-nav">
@@ -93,6 +93,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <script src="ULOOKhikakuJS.js"></script>
+</body>
+</html>
     </div>
 
     <script src="ULOOKhikakuJS.js"></script>
