@@ -7,57 +7,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let startX = 0;
     let currentTranslate = 0;
-    const scrollSpeed = 80; // CSSのanimation時間と合わせる
+    const scrollDuration = 80; // CSSの animation 秒数と一致させる
 
-    // 自動スクロールを完全に停止
+    // 現在の位置でアニメーションを物理的に停止・固定
     const stopAutoScroll = () => {
-        track.style.animation = 'none';
-    };
-
-    // 現在の位置からアニメーションを自然に再開
-    const startAutoScroll = () => {
-        const halfWidth = track.offsetWidth / 2;
-        // 現在のズレ（0〜半分まで）から進捗率（0〜100%）を計算
-        // translateXがマイナスなので絶対値をとる
-        let progress = (Math.abs(currentTranslate) % halfWidth) / halfWidth * 100;
-        
-        track.style.animation = `scroll ${scrollSpeed}s linear infinite`;
-        // 指を離した場所から再開するようにディレイを調整
-        track.style.animationDelay = `-${(progress / 100) * scrollSpeed}s`;
-    };
-
-    // 操作開始
-    const handleStart = (clientX) => {
-        isDragging = true;
-        
-        // 現在のアニメーションによる移動位置を正確に取得
         const style = window.getComputedStyle(track);
         const matrix = new WebKitCSSMatrix(style.transform);
-        currentTranslate = matrix.m41;
-        
-        // 指の開始位置を補正
-        startX = clientX - currentTranslate;
-        
-        stopAutoScroll();
+        currentTranslate = matrix.m41; // 現在のX座標を数値で取得
+        track.style.animation = 'none';
         track.style.transform = `translateX(${currentTranslate}px)`;
     };
 
-    // 操作中（スワイプ）
+    // 指を離した場所から静かに再開
+    const startAutoScroll = () => {
+        const halfWidth = track.offsetWidth / 2;
+        
+        // 1セット分の幅（0 〜 -halfWidth）の中での相対的な位置を算出
+        let relativeOffset = currentTranslate % halfWidth;
+        if (relativeOffset > 0) relativeOffset -= halfWidth;
+
+        // 全体の何パーセント地点にいるかを計算
+        const progress = Math.abs(relativeOffset) / halfWidth;
+        
+        // アニメーションを再適用し、delay（マイナス値）で位置をピタッと合わせる
+        track.style.animation = `scroll ${scrollDuration}s linear infinite`;
+        track.style.animationDelay = `-${progress * scrollDuration}s`;
+    };
+
+    const handleStart = (clientX) => {
+        isDragging = true;
+        stopAutoScroll();
+        startX = clientX - currentTranslate;
+        container.style.cursor = 'grabbing';
+    };
+
     const handleMove = (clientX) => {
         if (!isDragging) return;
-        
         currentTranslate = clientX - startX;
-        const halfWidth = track.offsetWidth / 2;
 
-        /* 【無限ループ・ワープ処理】
-           左端や右端に到達して余白が出そうになったら、
-           見た目を変えずに1セット分(halfWidth)位置を飛ばす
-        */
+        // 無限ループ境界チェック（余白を出さないワープ）
+        const halfWidth = track.offsetWidth / 2;
         if (currentTranslate <= -halfWidth) {
             startX += halfWidth;
             currentTranslate += halfWidth;
-        }
-        if (currentTranslate > 0) {
+        } else if (currentTranslate > 0) {
             startX -= halfWidth;
             currentTranslate -= halfWidth;
         }
@@ -65,34 +58,19 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(${currentTranslate}px)`;
     };
 
-    // 操作終了
     const handleEnd = () => {
         if (!isDragging) return;
         isDragging = false;
+        container.style.cursor = 'grab';
         startAutoScroll();
     };
 
-    // --- イベントリスナー ---
-
-    // タッチ操作
-    container.addEventListener('touchstart', (e) => {
-        handleStart(e.touches[0].clientX);
-    }, { passive: true });
-
-    container.addEventListener('touchmove', (e) => {
-        handleMove(e.touches[0].clientX);
-    }, { passive: true });
-
+    // イベントリスナー登録
+    container.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientX), { passive: true });
+    container.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientX), { passive: true });
     container.addEventListener('touchend', handleEnd);
 
-    // マウス操作
-    container.addEventListener('mousedown', (e) => {
-        handleStart(e.clientX);
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        handleMove(e.clientX);
-    });
-
+    container.addEventListener('mousedown', (e) => handleStart(e.clientX));
+    window.addEventListener('mousemove', (e) => handleMove(e.clientX));
     window.addEventListener('mouseup', handleEnd);
 });

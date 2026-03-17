@@ -1,4 +1,4 @@
-/* --- 1. 全体リセット & 下線・枠線の完全削除 --- */
+/* --- 1. 全体リセット & 下線・枠線削除 --- */
 * { 
     margin: 0; 
     padding: 0; 
@@ -11,15 +11,11 @@ body, html {
     width: 100vw; 
     height: 100vh; 
     overflow: hidden; 
-    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+    font-family: "Hiragino Kaku Gothic ProN", sans-serif;
     background-color: transparent; 
 }
 
-a {
-    color: inherit;
-    outline: none;
-    text-decoration: none !important;
-}
+a { color: inherit; outline: none; }
 
 /* --- 2. メインレイアウト --- */
 .stage {
@@ -31,7 +27,7 @@ a {
     flex-direction: column;
 }
 
-/* --- 3. 上部エリア（ロゴ・EVO2ボタン） --- */
+/* --- 3. 上部ナビゲーション（ロゴ・EVO2） --- */
 .top-nav {
     height: 45vh; 
     display: flex;
@@ -41,84 +37,39 @@ a {
     width: 100%;
 }
 
-.logo-img { 
-    width: 30vw; 
-    max-width: 550px; 
-    height: auto; 
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); 
-}
+.logo-img { width: 30vw; max-width: 550px; height: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
+.main-copy { font-size: 2.8vw; font-weight: 900; color: #1a1a1a; line-height: 1.4; }
 
-.main-copy { 
-    font-size: 2.8vw; 
-    font-weight: 900; 
-    margin-top: 2vh; 
-    color: #1a1a1a; 
-    line-height: 1.4; 
-}
-
-/* --- 4. EVO2ボタン（黄色ボックス） --- */
+/* --- 4. EVO2ボタン --- */
 .yellow-box { 
-    background: #ffd700; 
-    border-radius: 50px; 
-    padding: 3vh 4vw; 
-    display: flex; 
-    align-items: center; 
-    gap: 2vw; 
+    background: #ffd700; border-radius: 50px; padding: 3vh 4vw; 
+    display: flex; align-items: center; gap: 2vw; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
-    transition: transform 0.2s ease;
 }
 
-.yellow-box:active { 
-    transform: scale(0.95); 
-}
+.photo-guide-text, .photo-guide-text span { color: #000 !important; font-weight: bold; }
+.photo-guide-text { font-size: 1.8vw; line-height: 1.2; }
+.photo-guide-text span { font-size: 3.5vw; display: block; font-weight: 900; }
+.photo-lens-img { width: 12vw; height: auto; }
 
-.photo-guide-text, 
-.photo-guide-text span { 
-    color: #000 !important; 
-    font-weight: bold;
-    text-decoration: none !important;
-}
-
-.photo-guide-text { 
-    font-size: 1.8vw; 
-    line-height: 1.2; 
-}
-
-.photo-guide-text span { 
-    font-size: 3.5vw; 
-    display: block; 
-    font-weight: 900;
-}
-
-.photo-lens-img { 
-    width: 12vw; 
-    height: auto; 
-}
-
-/* --- 5. カルーセルエリア（挙動修正済み） --- */
+/* --- 5. カルーセルセクション（挙動制御） --- */
 .carousel-section { 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    width: 100%; 
-    padding-bottom: 5vh;
+    flex: 1; display: flex; align-items: center; width: 100%; padding-bottom: 5vh; 
 }
 
 .scroll-container { 
-    width: 100%; 
-    overflow: hidden; 
-    cursor: grab;
-    /* 修正：左右スワイプをJSに完全に委ね、ブラウザの「戻る」挙動と干渉させない */
+    width: 100%; overflow: hidden; 
+    /* ブラウザ標準の戻る・進む挙動を防止 */
     touch-action: none; 
+    cursor: grab;
     user-select: none;
 }
 
 .scroll-track { 
-    display: flex; 
-    width: max-content; 
+    display: flex; width: max-content; 
     animation: scroll 80s linear infinite; 
     will-change: transform;
-    /* 修正：重要！JS操作中にCSSのtransitionが割り込むと跳ね返りが発生するため、常時無効化 */
+    /* 重要：JS操作時にバウンスさせないため transition は禁止 */
     transition: none !important; 
 }
 
@@ -127,43 +78,17 @@ a {
     100% { transform: translateX(-50%); } 
 }
 
-/* 各レンズの設定 */
-.lens-card { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    margin: 0 6vw; 
-}
+.lens-card { display: flex; flex-direction: column; align-items: center; margin: 0 6vw; }
 
 .lens-card img {
     width: 38vw; 
     filter: drop-shadow(0 25px 50px rgba(0,0,0,0.3));
-    /* 画像の拡大アニメーションは維持 */
+    /* タップした時の拡大演出用のみ transition を生かす */
     transition: transform 0.3s ease;
-    /* 修正：画像へのタッチがスワイプを邪魔しないよう設定 */
     pointer-events: none; 
 }
 
-.lens-card:active img { 
-    transform: scale(1.1); 
-}
+.lens-card:active img { transform: scale(1.1); }
 
-.label {
-    text-align: center;
-    margin-bottom: 3vh;
-}
-
-.label .jp { 
-    display: block; 
-    font-size: 2vw; 
-    font-weight: 900; 
-    color: #000; 
-}
-
-.label .en { 
-    display: block; 
-    font-size: 1.1vw; 
-    color: #555; 
-    letter-spacing: 3px; 
-    margin-top: 0.5vh;
-}
+.label .jp { display: block; font-size: 2vw; font-weight: 900; color: #000; }
+.label .en { display: block; font-size: 1.1vw; color: #555; letter-spacing: 3px; }
