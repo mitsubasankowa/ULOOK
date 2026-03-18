@@ -10,6 +10,7 @@ body, html {
     position: relative;
 }
 
+/* 2層目：テクスチャ画像（同じフォルダにある場合の設定） */
 body::after {
     content: "";
     position: fixed;
@@ -82,7 +83,7 @@ body::after {
     position: absolute; 
     right: 3vw; 
     top: 4vh; 
-    width: 58vw; /* ★基準となる横幅 */
+    width: 58vw; 
     cursor: pointer; 
     z-index: 5;
 }
@@ -101,14 +102,28 @@ body::after {
 .view-img.on { opacity: 0; }
 .view-img.on.active { opacity: 1; }
 
-.toggle-badge { position: absolute; bottom: 3vh; right: 2.5vw; padding: 1.5vh 3.5vw; font-size: 1.8vw; font-weight: bold; border-radius: 50px; z-index: 10; box-shadow: 0 1vh 3vh rgba(0,0,0,0.4); }
+/* --- ★ON/OFFボタン：ブルーと共通の装飾 --- */
+.toggle-badge { 
+    position: absolute; 
+    bottom: 3vh; 
+    right: 2.5vw; 
+    padding: 1.5vh 3.5vw; 
+    font-size: 1.8vw; 
+    font-weight: bold; 
+    border-radius: 50px; 
+    z-index: 10; 
+    box-shadow: 0 1vh 3vh rgba(0,0,0,0.4); 
+    transition: all 0.3s ease;
+    pointer-events: none; /* 親のviewAreaでクリック判定を取るため */
+}
+.toggle-badge.is-on { background: #2ecc71; color: #fff; }
+.toggle-badge.is-off { background: #7f8c8d; color: #fff; }
 
-/* --- 5. 右側：適合表（画像の横幅 58vw と完全に一致させる） --- */
+/* --- 5. 右側：適合表（横幅 58vw 統一） --- */
 .compatibility-box {
     position: absolute;
     top: 65vh; 
     right: 3vw;
-    /* ★画像と全く同じ 58vw に設定 */
     width: 58vw; 
 }
 .table-caption { font-size: 2.5vw; font-weight: 900; margin-bottom: 1.2vh; color: #000; }
@@ -118,28 +133,22 @@ body::after {
     border-collapse: collapse; 
     background: #fff; 
     border: 3.5px solid #000;
-    /* AGVのみでも 58vw いっぱいに広がるように設定 */
     table-layout: fixed; 
 }
-
 .spec-table th { 
     background: #000; color: #fff; padding: 1.5vh 0.5vw; 
     font-size: 1.6vw; 
     text-align: center; 
     vertical-align: middle; 
 }
-
 .spec-table td { 
     border: 1px solid #000; 
-    /* 枠（白いセル）を大きく見せるための上下パディング */
     padding: 2.8vh 1vw; 
     font-weight: 900; 
     text-align: center; 
     vertical-align: middle; 
     font-size: 1.2vw; 
     color: #000;
-    
-    /* 2行表示を許可して文字切れを完全に防ぐ */
     white-space: normal; 
     word-break: break-word; 
     line-height: 1.3; 
