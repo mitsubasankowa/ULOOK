@@ -5,14 +5,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!viewArea || !onImage || !badge) return;
 
-    viewArea.addEventListener('click', () => {
+    // タブレット・PC両方に対応させる関数
+    const toggleDisplay = (e) => {
+        // 二重動作を防ぐ
+        e.preventDefault();
+        
         const isActive = onImage.classList.toggle('active');
+        
         if (isActive) {
             badge.innerText = '装着ON';
-            badge.classList.replace('is-off', 'is-on');
+            badge.classList.remove('is-off');
+            badge.classList.add('is-on');
         } else {
             badge.innerText = '装着OFF';
-            badge.classList.replace('is-on', 'is-off');
+            badge.classList.remove('is-on');
+            badge.classList.add('is-off');
         }
-    });
+    };
+
+    // 「クリック」と「指で触れた瞬間（touchend）」の両方に反応させる
+    viewArea.addEventListener('click', toggleDisplay);
+    viewArea.addEventListener('touchend', toggleDisplay);
 });
