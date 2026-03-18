@@ -1,0 +1,50 @@
+/* --- 1. 背景の3層構造（不変） --- */
+body, html { width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; font-family: "Hiragino Kaku Gothic ProN", sans-serif; background-color: #eaeaee !important; position: relative; }
+body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('texture.png') center/cover no-repeat; opacity: 0.9; z-index: 0; pointer-events: none; }
+.stage { position: relative; z-index: 1; width: 100%; height: 100%; background: transparent !important; }
+
+/* --- 2. 戻るボタン（大型化） --- */
+.nav-header { position: absolute; top: 4vh; left: 4vw; z-index: 100; }
+.back-link { display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #fff; padding: 1.8vh 3.5vw; font-size: 2.2vw; font-weight: 900; border-radius: 12px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.back-link::before { content: '◀'; margin-right: 1.5vw; font-size: 2.5vw; }
+
+/* --- 3. 左側：製品表示（左端へ寄せる調整） --- */
+.product-visual { 
+    position: absolute; 
+    /* ★左端の余白を詰める（6vw → 3vw） */
+    left: 3vw; 
+    top: 50vh; transform: translateY(-50%); 
+    /* 画像を少し大きくして迫力を出す */
+    width: 32vw; 
+    z-index: 10;
+}
+.lens-display-img { width: 100%; filter: drop-shadow(0 2vh 4vh rgba(0,0,0,0.3)); }
+
+.product-titles { 
+    position: absolute; 
+    top: 60vh; 
+    /* ★画像に合わせて左へ寄せる */
+    left: 3vw; 
+    width: 32vw; 
+    text-align: center; 
+}
+.name-jp { font-size: 3.8vw; font-weight: 900; white-space: nowrap; }
+.name-en { font-size: 1.5vw; font-weight: bold; letter-spacing: 8px; color: #333; text-transform: uppercase; margin-top: 0.5vh; white-space: nowrap; }
+
+/* --- 4. 右側：シミュレーター（最大化を維持） --- */
+.view-comparison { position: absolute; right: 3vw; top: 4vh; width: 58vw; cursor: pointer; z-index: 5; }
+.guide-text { font-size: 1.4vw; font-weight: bold; text-align: right; margin-bottom: 0.8vh; }
+.image-frame { position: relative; width: 100%; height: 52vh; border-radius: 20px; overflow: hidden; box-shadow: 0 3vh 6vh rgba(0,0,0,0.4); background: #000; }
+.view-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+.view-img.on.active { opacity: 1; }
+.view-img.on { opacity: 0; }
+.toggle-badge { position: absolute; bottom: 3vh; right: 2.5vw; padding: 1.5vh 3.5vw; font-size: 1.8vw; font-weight: bold; border-radius: 50px; z-index: 10; }
+.toggle-badge.is-on { background: #2ecc71; color: #fff; }
+.toggle-badge.is-off { background: #7f8c8d; color: #fff; }
+
+/* --- 5. 右側：適合表（位置上げ・文字1行を死守） --- */
+.compatibility-box { position: absolute; top: 65vh; right: 3vw; width: 58vw; }
+.table-caption { font-size: 2.5vw; font-weight: 900; margin-bottom: 1.2vh; }
+.spec-table { width: 100%; border-collapse: collapse; background: #fff; border: 3.5px solid #000; table-layout: fixed; }
+.spec-table th { background: #000; color: #fff; padding: 1.2vh; font-size: 1.5vw; text-align: center; vertical-align: middle; }
+.spec-table td { border: 1px solid #000; padding: 1.8vh 0.5vw; font-weight: 900; text-align: center; vertical-align: middle; font-size: 1.05vw; white-space: nowrap; overflow: hidden; }
